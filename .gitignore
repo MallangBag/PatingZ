@@ -2,13 +2,13 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
-/PatingZ/[Ll]ibrary/
-/PatingZ/[Tt]emp/
-/PatingZ/[Oo]bj/
-/PatingZ/[Bb]uild/
-/PatingZ/[Bb]uilds/
-/PatingZ/[Ll]ogs/
-/PatingZ/[Mm]emoryCaptures/
+PatingZ/[Ll]ibrary/
+PatingZ/[Tt]emp/
+PatingZ/[Oo]bj/
+PatingZ/[Bb]uild/
+PatingZ/[Bb]uilds/
+PatingZ/[Ll]ogs/
+PatingZ/[Mm]emoryCaptures/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
