@@ -5,19 +5,22 @@ using UnityEngine.SceneManagement;
 
 public class TitleButton : MonoBehaviour
 {
+    [SerializeField]
+    Canvas optionCanvas;
+
     public void _Start()
     {
         SceneManager.LoadScene("Load");
     }
     public void Option()
     {
-
+        optionCanvas.enabled = true;
     }
     public void Achievements()
     {
 
     }
-    public void Exit()
+    public void Quit()
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
@@ -25,4 +28,5 @@ public class TitleButton : MonoBehaviour
         Application.Quit();
 #endif
     }
+    
 }
