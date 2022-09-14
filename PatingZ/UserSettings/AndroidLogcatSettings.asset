@@ -1,5 +1,5 @@
 {
-    "m_SelectedDeviceId": "",
+    "m_SelectedDeviceId": "5210f34ec0301429",
     "m_SelectedPackage": {
         "deviceId": "",
         "name": "",
@@ -7,7 +7,32 @@
         "exited": false
     },
     "m_SelectedPriority": 0,
-    "m_KnownPackagesForSerialization": [],
+    "m_KnownPackagesForSerialization": [
+        {
+            "deviceId": "5210f34ec0301429",
+            "name": "com.DefaultCompany.PatingZ",
+            "processId": 18213,
+            "exited": true
+        },
+        {
+            "deviceId": "5210f34ec0301429",
+            "name": "com.DefaultCompany.PatingZ",
+            "processId": 21188,
+            "exited": true
+        },
+        {
+            "deviceId": "5210f34ec0301429",
+            "name": "com.DefaultCompany.PatingZ",
+            "processId": 7561,
+            "exited": true
+        },
+        {
+            "deviceId": "5210f34ec0301429",
+            "name": "com.android.settings",
+            "processId": 6757,
+            "exited": false
+        }
+    ],
     "m_Tags": {
         "m_Entries": [
             {
