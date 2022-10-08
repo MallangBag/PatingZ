@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class TitleButtonEE : MonoBehaviour
+public class TextButtonEE : MonoBehaviour
 {
     public void Enter()
     {
