@@ -42,14 +42,20 @@ TagManager:
     uniqueID: 0
     locked: 0
   - name: BackGround
-    uniqueID: 1737669565
+    uniqueID: 476715759
     locked: 0
   - name: Map
-    uniqueID: 1921732939
+    uniqueID: 3117445753
     locked: 0
   - name: Button
-    uniqueID: 3858082811
+    uniqueID: 2243974111
+    locked: 0
+  - name: SubWindow
+    uniqueID: 378573097
     locked: 0
   - name: Option
-    uniqueID: 2769202401
+    uniqueID: 469506933
+    locked: 0
+  - name: Monster
+    uniqueID: 489415669
     locked: 0
