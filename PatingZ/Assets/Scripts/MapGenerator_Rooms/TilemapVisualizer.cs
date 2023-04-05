@@ -25,7 +25,7 @@ public class TilemapVisualizer : MonoBehaviour
     }
 
     /// <summary>
-    /// 벽 만듦 메서드
+    /// (internal) 벽 만들 좌표값 받는 메서드
     /// </summary>
     /// <param name="position"></param>
     internal void PaintSingleBasicWall(Vector2Int position)
