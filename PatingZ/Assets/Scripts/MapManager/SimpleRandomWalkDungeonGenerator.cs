@@ -1,3 +1,9 @@
+/*
+ * "상속(Inheritance) 메소드 많음"
+ * 타일Data 받아서
+ * 맵, 벽 생성
+ */
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +16,9 @@ public class SimpleRandomWalkDungeonGenerator : AbstractDungeonGenerator
     [SerializeField]
     protected SimpleRandomWalkSO randomWalkParameters;
 
+    /// <summary>
+    /// 기존에 있던 맵&벽 삭제 후 맵&벽 생성
+    /// </summary>
     protected override void RunProceduralGeneration()
     {
         HashSet<Vector2Int> floorPositions = RunRandomWalk(randomWalkParameters, startPosition);
@@ -18,6 +27,12 @@ public class SimpleRandomWalkDungeonGenerator : AbstractDungeonGenerator
         WallGenerator.CreateWalls(floorPositions, tilemapVisualizer);
     }
 
+    /// <summary>
+    /// 랜덤값의 구역 정하게 해줌
+    /// </summary>
+    /// <param name="parameters"> SO library </param>
+    /// <param name="position"> 시작 위치 </param>
+    /// <returns></returns>
     protected HashSet<Vector2Int> RunRandomWalk(SimpleRandomWalkSO parameters, Vector2Int position)
     {
         var currentPosition = position;
