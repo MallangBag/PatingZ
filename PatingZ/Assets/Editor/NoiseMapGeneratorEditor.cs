@@ -19,5 +19,10 @@ public class NoiseMapGeneratorEditor : Editor
         {
             generator.GenerateMap();
         }
+        if(GUILayout.Button("Clear Map"))
+        {
+            generator.ClearMap();
+        }
     }
+
 }

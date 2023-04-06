@@ -8,11 +8,14 @@ public class NoiseMapGenerator : AbstractNoiseMapGenerator
     [SerializeField]
     private int density = 60;
     [SerializeField]
-    [Range(1, 10)]
+    [Range(0, 10)]
     private int count;
     [SerializeField]
     private int mapWidth, mapHeight;
     private Vector2Int position;
+    [SerializeField]
+    Tilemap tempTilemap;
+
 
 
     protected override void RunProceduralGeneration()
@@ -22,57 +25,86 @@ public class NoiseMapGenerator : AbstractNoiseMapGenerator
 
     private void MakeNoiseMap()
     {
+        MakeNoise();
         MakeNoisemapAutomaton();
-        //MakeNoise();
     }
 
     private void MakeNoisemapAutomaton()
     {
-        for (int i = 1; i < count; i++)
+        for (int i = 0; i < count; i++)
         {
-            Grid tempGrid = noiseMapVisualizer.backgroundTilemap.layoutGrid;
-            for (int j = 1; j < mapHeight; j++)
+            CopyTilemap();
+            for (int x = 1; x < mapWidth; x++)
             {
-                for (int k = 1; k < mapWidth; k++)
+                for (int y = 1; y < mapHeight; y++)
                 {
                     int neighborWallCount = 0;
-                    for (int y = j - 1; y < j + 1; y++)
+                    bool border = false;
+                    for (int xTemp = x - 1; xTemp <= x + 1; xTemp++)
                     {
-                        for (int x = k - 1; x < k + 1; x++)
+                        for (int yTemp = y - 1; yTemp <= y + 1; yTemp++)
                         {
-
-                            if (x >= 1 && y >= 1
-                                && noiseMapVisualizer.backgroundTilemap.cellBounds.size.x >= x && noiseMapVisualizer.backgroundTilemap.cellBounds.size.y >= y)
+                            if (1 <= xTemp && xTemp < mapWidth && 1 <= yTemp && yTemp < mapHeight)
                             {
-                                if (y != j || x != k)
-                                    Debug.Log(noiseMapVisualizer.wallTilemap.GetTile(tempGrid.WorldToCell(new Vector3(y, x, 0))));
-                                    if (noiseMapVisualizer.wallTilemap.GetTile(tempGrid.WorldToCell(new Vector3(y, x, 0))) == null)
+                                if (xTemp != x || yTemp != y)
+                                    if (tempTilemap.GetTile(new Vector3Int(xTemp, yTemp, 0)) == noiseMapVisualizer.wallTile)
                                         neighborWallCount++;
                             }
                             else
-                                neighborWallCount++;
-                        }
+                                border = true;
+                            }
                     }
-                    Debug.Log(neighborWallCount);
-                    if (neighborWallCount > 4)
+                    if (neighborWallCount > 4 || border)
                     {
-                        noiseMapVisualizer.PaintSingleBasicWall(new Vector2Int(j, k));
+                        noiseMapVisualizer.PaintSingleBasicWall(new Vector2Int(x, y));
                     }
                     else
                     {
-                        noiseMapVisualizer.PaintSingleBasicBackground(new Vector2Int(j, k));
+                        noiseMapVisualizer.PaintSingleBasicBackground(new Vector2Int(x, y));
                     }
                 }
             }
-
         }
+    }
+
+    private void CopyTilemap()
+    {
+        BoundsInt bounds = noiseMapVisualizer.mapTilemap.cellBounds;
+
+        for (int x = bounds.min.x; x < bounds.max.x; x++)
+        {
+            for (int y = bounds.min.y; y < bounds.max.y; y++)
+            {
+                Vector3Int tilePos = new Vector3Int(x, y, 0);
+                TileBase originalTile = noiseMapVisualizer.mapTilemap.GetTile(tilePos);
+                tempTilemap.SetTile(tilePos, originalTile);
+            }
+        }
+
+        //GPT가 말한 추가 소스
+        //// 추가로 복제할 Tile이 있다면, 해당 Tile을 추가
+        ////if (tileToCopy != null)
+        ////{
+        ////    for (int x = bounds.min.x; x < bounds.max.x; x++)
+        ////    {
+        ////        for (int y = bounds.min.y; y < bounds.max.y; y++)
+        ////        {
+        ////            Vector3Int tilePos = new Vector3Int(x, y, 0);
+        ////            TileBase copiedTile = copiedTilemap.GetTile(tilePos);
+        ////            if (copiedTile != null)
+        ////            {
+        ////                copiedTilemap.SetTile(tilePos, tileToCopy);
+        ////            }
+        ////        }
+        ////    }
+        ////}
     }
 
     private void MakeNoise()
     {
-        for (int height = 0; height < mapHeight; height++)
+        for (int height = 0; height <= mapHeight; height++)
         {
-            for (int width = 0; width < mapWidth; width++)
+            for (int width = 0; width <= mapWidth; width++)
             {
                 position.x = width;
                 position.y = height;

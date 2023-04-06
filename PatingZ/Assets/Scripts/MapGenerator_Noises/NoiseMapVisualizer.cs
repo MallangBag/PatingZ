@@ -6,44 +6,36 @@ using UnityEngine.Tilemaps;
 
 public class NoiseMapVisualizer : MonoBehaviour
 {
-    //타일맵: 배경, 벽
+    //타일맵: 맵
     [SerializeField]
-    public Tilemap backgroundTilemap, wallTilemap; 
+    public Tilemap mapTilemap; 
     //타일: 배경, 벽
     [SerializeField]
-    private TileBase backgroundTile, wallTile;
+    public TileBase backgroundTile, wallTile;
 
-
-    /// <summary>
-    /// 타일맵 만들 위치 받는 메서드
-    /// </summary>
-    /// <param name="backgroundPositions"></param>
-    internal void PaintSingleBasicBackground(Vector2Int backgroundPosition)
+    internal void PaintSingleBasicBackground(Vector2Int position)
     {
-        PaintSingleTile(backgroundPosition, backgroundTilemap, backgroundTile);
+        PaintSingleTile(position, backgroundTile);
     }
     internal void PaintSingleBasicWall(Vector2Int position)
     {
-        PaintSingleTile(position, wallTilemap, wallTile);
+        PaintSingleTile(position, wallTile);
     }
 
-    /// <summary>
-    /// 타일 칠하는 메서드
-    /// </summary>
-    /// <param name="position"></param>
-    /// <param name="tilemap"></param>
-    /// <param name="tile"></param>
-    private void PaintSingleTile(Vector2Int position, Tilemap tilemap, TileBase tile)
+    private void PaintSingleTile(Vector2Int position, TileBase tile)
     {
-        var tilePosition = tilemap.WorldToCell((Vector3Int)position);
-        tilemap.SetTile(tilePosition, tile);
+        //타일 칠 하는 메서드
+        var tilePosition = mapTilemap.WorldToCell((Vector3Int)position);
+        if (mapTilemap.GetTile(tilePosition) != null)
+        {
+            mapTilemap.SetTile(tilePosition, null);
+        }
+        mapTilemap.SetTile(tilePosition, tile);
     }
-    /// <summary>
-    /// 전에 있던 타일들 삭제
-    /// </summary>
+
     public void Clear()
     {
-        backgroundTilemap.ClearAllTiles();
-        wallTilemap.ClearAllTiles();
+        //타일 전부 삭제
+        mapTilemap.ClearAllTiles();
     }
 }

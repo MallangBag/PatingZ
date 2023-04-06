@@ -20,6 +20,10 @@ public abstract class AbstractNoiseMapGenerator : MonoBehaviour
         noiseMapVisualizer.Clear();
         RunProceduralGeneration();
     }
+    public void ClearMap()
+    {
+        noiseMapVisualizer.Clear();
+    }
 
     protected abstract void RunProceduralGeneration() ;
 }
