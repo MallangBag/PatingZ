@@ -17,17 +17,20 @@ public class CorridorFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator
         CorridorFirstGeneration();
     }
 
+    //복도 생성 메서드
     private void CorridorFirstGeneration()
     {
         HashSet<Vector2Int> floorPositions = new HashSet<Vector2Int>();
         HashSet<Vector2Int> potentialRoomPositions = new HashSet<Vector2Int>();
 
+        //복도 생성
         CreateCorridors(floorPositions, potentialRoomPositions);    //복도 생성
 
         HashSet<Vector2Int> roomPositions = CreateRooms(potentialRoomPositions);
 
         List<Vector2Int> deadEnds = FindAllDeadEnds(floorPositions);
 
+        //모든 룸 이어주기
         CreateRoomsAtDeadEnd(deadEnds, roomPositions);
 
         floorPositions.UnionWith(roomPositions);

@@ -16,9 +16,7 @@ public class SimpleRandomWalkDungeonGenerator : AbstractDungeonGenerator
     [SerializeField]
     protected SimpleRandomWalkSO randomWalkParameters;
 
-    /// <summary>
-    /// 기존에 있던 맵&벽 삭제 후 맵&벽 생성
-    /// </summary>
+    //기존에 있던 맵&벽 삭제 후 맵&벽 생성
     protected override void RunProceduralGeneration()
     {
         HashSet<Vector2Int> floorPositions = RunRandomWalk(randomWalkParameters, startPosition);
@@ -27,16 +25,11 @@ public class SimpleRandomWalkDungeonGenerator : AbstractDungeonGenerator
         WallGenerator.CreateWalls(floorPositions, tilemapVisualizer);
     }
 
-    /// <summary>
-    /// 랜덤값의 구역 정하게 해줌
-    /// </summary>
-    /// <param name="parameters"> SO library </param>
-    /// <param name="position"> 시작 위치 </param>
-    /// <returns></returns>
+    //parameters 인자값만큼 랜덤으로 room 만듦
     protected HashSet<Vector2Int> RunRandomWalk(SimpleRandomWalkSO parameters, Vector2Int position)
     {
         var currentPosition = position;
-        HashSet<Vector2Int> floorPositions = new HashSet<Vector2Int>();
+        HashSet<Vector2Int> floorPositions = new();
         for (int i = 0; i < parameters.iterations; i++)
         {
             var path = ProceduralGenerationAlgorithms.SimpleRandomWalk(currentPosition, randomWalkParameters.walkLength);
