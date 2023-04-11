@@ -13,7 +13,7 @@ public class TilemapVisualizer : MonoBehaviour
     [SerializeField]
     private Tilemap floorTilemap, wallTilemap;
     [SerializeField]
-    private TileBase floorTile, wallTop;
+    private TileBase floorTile, wallTop, wallSideRight, wallSideLeft , wallBottom, wallFull;
 
     /// <summary>
     /// 타일맵 만들 좌표값들 받는 메서드
@@ -28,9 +28,32 @@ public class TilemapVisualizer : MonoBehaviour
     /// (internal) 벽 만들 좌표값 받는 메서드
     /// </summary>
     /// <param name="position"></param>
-    internal void PaintSingleBasicWall(Vector2Int position)
+    internal void PaintSingleBasicWall(Vector2Int position, string binaryType)
     {
-        PaintSingleTile(wallTilemap, wallTop, position);
+        int typeAsInt = Convert.ToInt32(binaryType, 2);
+        TileBase tile = null;
+        if(WallTypeshelper.wallTop.Contains(typeAsInt))
+        {
+            tile = wallTop;
+        }
+        else if(WallTypeshelper.wallSideRight.Contains(typeAsInt))
+        {
+            tile = wallSideRight;
+        }
+        else if (WallTypeshelper.wallSideLeft.Contains(typeAsInt))
+        {
+            tile = wallSideLeft;
+        }
+        else if (WallTypeshelper.wallBottom.Contains(typeAsInt))
+        {
+            tile = wallBottom;
+        }
+        else if (WallTypeshelper.wallFull.Contains(typeAsInt))
+        {
+            tile = wallFull;
+        }
+        if (tile != null)
+            PaintSingleTile(wallTilemap, tile, position);
     }
 
     /// <summary>
@@ -45,6 +68,11 @@ public class TilemapVisualizer : MonoBehaviour
         {
             PaintSingleTile(tilemap, tile, position);
         }
+    }
+
+    internal void PaintSingleCornerWall(Vector2Int position, string neighboursBinaryType)
+    {
+        throw new NotImplementedException();
     }
 
     /// <summary>
