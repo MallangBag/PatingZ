@@ -16,6 +16,8 @@ public class CustomRoomDungeonGenerator : SimpleRandomWalkDungeonGenerator
     [SerializeField]
     private bool randomWalkRooms = false;
 
+    float whileTimer = 0f;
+
 
     protected override void RunProceduralGeneration()
     {
@@ -149,76 +151,138 @@ public class CustomRoomDungeonGenerator : SimpleRandomWalkDungeonGenerator
         Vector2Int[] closest = new Vector2Int[2];
         float distance1 = float.MaxValue;
         float distance2 = float.MaxValue;
-        foreach (var position in roomPoints)
+        if (roomPoints.Count > 1)
         {
-            float currentDistance = Vector2.Distance(currentPoint, position);
+            foreach (var position in roomPoints)
+            {
+                float currentDistance = Vector2.Distance(currentPoint, position);
 
-            //첫번째보다 작은지
-            if(currentDistance < distance1)
-            {
-                distance2 = distance1;
-                distance1 = currentDistance;
-                closest[1] = closest[0];
-                closest[0] = position;
+                //첫번째보다 작은지
+                if (currentDistance < distance1)
+                {
+                    distance2 = distance1;
+                    distance1 = currentDistance;
+                    closest[1] = closest[0];
+                    closest[0] = position;
+                }
+                //두번째부다 작은지
+                else if (currentDistance < distance2)
+                {
+                    distance2 = currentDistance;
+                    closest[1] = position;
+                }
             }
-            //두번째부다 작은지
-            else if(currentDistance < distance2)
-            {
-                distance2 = currentDistance;
-                closest[1] = position;
-            }
+        }
+        else
+        {
+            closest[0] = roomPoints[0];
+            closest[1] = roomPoints[0];
         }
         return closest;
     }
-    private HashSet<Vector2Int> CreateCorridor(Vector2Int currentPoint, Vector2Int destination)
+    private HashSet<Vector2Int> CreateCorridor(Vector2Int currentPosition, Vector2Int destination)
     {
         Debug.Log("CreateCorridor");
 
         HashSet<Vector2Int> corridor = new();
-        var position = currentPoint;
-        corridor.Add(position);
+        corridor.Add(currentPosition);
 
         //목표까지 거리
-        int dx = destination.x - currentPoint.x; 
-        int dy = destination.y - currentPoint.y;
+        int dx = Mathf.Abs(destination.x - currentPosition.x);
+        int dy = Mathf.Abs(destination.y - currentPosition.y);
 
         //방향
-        int xDir = dx > 0 ? 1 : -1;
-        int yDir = dy > 0 ? 1 : -1;
+        int xDir = destination.x - currentPosition.x > 0 ? 1 : -1;
+        int yDir = destination.y - currentPosition.y > 0 ? 1 : -1;
 
-        int x = 0, y = 0;
+        ////랜덤범위 정하기
+        //Random 오차 내: range 미만
+        int rangeExtend = 3;
+        //x축 확장(가로로 확장)
+        int expandMinX = (int)minRoomWidth / (5 * 2);
+        int expandMaxX = expandMinX + 2;//(int)minRoomWidth / 5;
+        //y축 확장(세로로 확장)
+        int expandMinY = (int)minRoomHeight / 4;
+        int expandMaxY = expandMinY + 2;//(int)minRoomHeight / 5;
+        //통로 범위 확장 시킬 범위
+        int expandX;
+        int expandY;
 
-        //x값만 급경사 생기게
-        while (position.x != destination.x || position.y != destination.y)
+        //현위치(position)과 x y의 거리가 있다면: 한쪽이 먼저 도착할때까지
+        while (dx > rangeExtend && dy > rangeExtend)
         {
-            int randomX = Random.Range(0, 3);
-            int randomY = Random.Range(0, 3);
-            if (Mathf.Abs(x + xDir * randomX) <= Mathf.Abs(dx))
+            int extendX = Random.Range(1, rangeExtend);
+            int extendY = Random.Range(1, rangeExtend);
+            expandX = Random.Range(expandMinX, expandMaxX);
+            expandY = Random.Range(expandMinY, expandMaxY);
+
+            //목표x에 방향(xDir),거리(randomX)만큼 다가감
+            if (dx > rangeExtend)
             {
-                x += (xDir * randomX);
+                for (int i = 0; i < extendX; i++)
+                {
+                    currentPosition += Vector2Int.right * xDir;
+                    dx = Mathf.Abs(destination.x - currentPosition.x);
+                    corridor.Add(currentPosition);
+                    for (int j = -expandY + 1;  j < expandY; j++)
+                    {
+                        Vector2Int expandPosition = currentPosition + (Vector2Int.up * j);
+                        corridor.Add(expandPosition);
+                    }
+                }
             }
-            if (Mathf.Abs(y + yDir * randomY) <= Mathf.Abs(dy))
+            //목표y에 다가감
+            if (dy > rangeExtend)
             {
-                y += (yDir * randomY);
+                for (int i = 0; i < extendY; i++)
+                {
+                    currentPosition += Vector2Int.up * yDir;
+                    dy = Mathf.Abs(destination.y - currentPosition.y);
+                    corridor.Add(currentPosition);
+                    for (int j = -expandX + 1; j < expandX; j++)
+                    {
+                        Vector2Int expandPosition = currentPosition + (Vector2Int.right * j);
+                        corridor.Add(expandPosition);
+                    }
+                }
             }
-            position += new Vector2Int(x, y);
-            corridor.Add(position);
-            Debug.Log("경사: " + position);
+
         }
 
-        //대각선으로 x 또는 y의 위치가 같아졌으면 평지로
-        while (position.x != destination.x)
+        //목표x에 도달했다면 남은 y처리
+        if (dx <= rangeExtend)
         {
-            position.x = destination.x;
-            position += new Vector2Int(xDir, 0);
-            corridor.Add(position);
+            while (dy > rangeExtend)
+            {
+                expandX = Random.Range(expandMinX, expandMaxX);
+                currentPosition += Vector2Int.up * yDir;
+                dy = Mathf.Abs(destination.y - currentPosition.y);
+                corridor.Add(currentPosition);
+                for (int j = -expandX + 1; j < expandX; j++)
+                {
+                    Vector2Int expandPosition = currentPosition + (Vector2Int.right * j);
+                    corridor.Add(expandPosition);
+                }
+            }
+            
         }
 
-        while (position.y != destination.y)
+        //y목표에 도달했다면 남은 x처리
+        if (dy <= rangeExtend)
         {
-            position.y = destination.y;
-            position += new Vector2Int(0, yDir);
-            corridor.Add(position);
+            while (dx > rangeExtend)
+            {
+                expandY = Random.Range(expandMinY, expandMaxY);
+                currentPosition += Vector2Int.right * xDir;
+                dx = Mathf.Abs(destination.x - currentPosition.x);
+                corridor.Add(currentPosition);
+                for (int j = -expandY + 1; j < expandY; j++)
+                {
+                    Vector2Int expandPosition = currentPosition + (Vector2Int.up * j);
+                    corridor.Add(expandPosition);
+                }
+            }
+            
         }
 
         return corridor;

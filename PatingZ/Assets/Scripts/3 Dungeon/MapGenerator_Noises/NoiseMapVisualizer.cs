@@ -8,7 +8,7 @@ public class NoiseMapVisualizer : MonoBehaviour
 {
     //타일맵: 맵
     [SerializeField]
-    public Tilemap mapTilemap; 
+    public Tilemap mapTilemap, tempTilemap; 
     //타일: 배경, 벽
     [SerializeField]
     public TileBase backgroundTile, wallTile;
@@ -37,5 +37,6 @@ public class NoiseMapVisualizer : MonoBehaviour
     {
         //타일 전부 삭제
         mapTilemap.ClearAllTiles();
+        tempTilemap.ClearAllTiles();
     }
 }

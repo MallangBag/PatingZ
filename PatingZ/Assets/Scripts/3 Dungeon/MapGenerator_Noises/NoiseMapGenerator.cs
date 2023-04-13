@@ -34,9 +34,9 @@ public class NoiseMapGenerator : AbstractNoiseMapGenerator
         for (int i = 0; i < count; i++)
         {
             CopyTilemap();
-            for (int x = 1; x < mapWidth; x++)
+            for (int x = 0; x <= mapWidth; x++)
             {
-                for (int y = 1; y < mapHeight; y++)
+                for (int y = 0; y <= mapHeight; y++)
                 {
                     int neighborWallCount = 0;
                     bool border = false;
