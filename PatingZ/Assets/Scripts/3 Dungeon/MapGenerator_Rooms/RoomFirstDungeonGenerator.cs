@@ -45,6 +45,7 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator
         HashSet<Vector2Int> corridors = CennectRooms(roomCenters);
         floor.UnionWith(corridors);
 
+        //¸Ê ±×¸®±â
         tilemapVisualizer.PaintFloorTiles(floor);
         WallGenerator.CreateWalls(floor, tilemapVisualizer);
     }
