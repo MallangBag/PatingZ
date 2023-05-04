@@ -15,11 +15,11 @@ public class NoiseMapGeneratorEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        if(GUILayout.Button("Create Map"))
+        if(GUILayout.Button("Create"))
         {
             generator.GenerateMap();
         }
-        if(GUILayout.Button("Clear Map"))
+        if (GUILayout.Button("Clear"))
         {
             generator.ClearMap();
         }

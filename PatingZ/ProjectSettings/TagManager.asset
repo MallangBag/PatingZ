@@ -41,14 +41,11 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: BackGround
+  - name: Map
     uniqueID: 476715759
     locked: 0
-  - name: Map
-    uniqueID: 3117445753
-    locked: 0
-  - name: Button
-    uniqueID: 2243974111
+  - name: UI
+    uniqueID: 3284499359
     locked: 0
   - name: SubWindow
     uniqueID: 378573097
