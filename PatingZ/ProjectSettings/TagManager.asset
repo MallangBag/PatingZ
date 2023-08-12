@@ -47,7 +47,7 @@ TagManager:
   - name: UI
     uniqueID: 3284499359
     locked: 0
-  - name: SubWindow
+  - name: SubUI
     uniqueID: 378573097
     locked: 0
   - name: Option
